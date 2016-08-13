@@ -33,10 +33,10 @@ fgbg_mask = None
 display_rectangles = False
 
 # Initialize Serial Port
-ser = serial.Serial('/dev/tty.usbmodem1411')
+ser = serial.Serial('/dev/tty.usbmodem1411', baudrate=9600)
 
 # initialize mixer for audio
-pygame.mixer.init(44100, -16, 2, 2048)
+#pygame.mixer.init(44100, -16, 2, 2048)
 
 # =============================================================================
 #  Helper Methods
@@ -48,7 +48,7 @@ def calculate_angle(frame_dim, center):
 
 
 def send_signal(pan_angle, tilt_angle, fire_flag):
-    signal = 'f' + format_angle(pan_angle) + format_angle(tilt_angle) + format_angle(fire_flag)
+    signal = 'f' + chr(pan_angle) + chr(tilt_angle) + str(fire_flag)
     print signal
     ser.write(signal)
     sleep(.1)
@@ -113,7 +113,9 @@ if __name__ == "__main__":
 
             # Calculate the center point and adjust the position of the turret
             pan = int(calculate_angle(frame.shape[1], center[0]))
-            print pan
+            tilt = int(calculate_angle(frame.shape[0], center[1]))
+            print "pan: ", pan
+            print "tilt:", tilt
             # Communicate with Arduino
             send_signal(pan, tilt, fire)
             sleep(.1)

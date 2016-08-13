@@ -36,8 +36,8 @@ void loop() {
     if (flag == 'f')
     {
       // Step through all elements in the byte stream that are in an incident window
-      pan = getSerialAngle();
-      tilt = getSerialAngle();
+      pan = Serial.read();
+      tilt = Serial.read();
       
       fire = Serial.read();
         
@@ -50,20 +50,4 @@ void loop() {
   panServo.write(pan);
   
   delay(100);
-}
-
-
-int getSerialAngle()
-{
-  char byte_stream[4];
-  
-  // Step through all elements in the byte stream that are in an incident window
-  for (int i = 0; i < 3; i++) 
-  {
-    byte_stream[i] = Serial.read();
-  }
-  byte_stream[3] = '\0';
-  
-  // Parse positioning into pan, tilt, and fire 
-  return atoi(byte_stream);
 }
